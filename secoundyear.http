@@ -1,0 +1,6 @@
+@secoundyear_HostAddress = http://localhost:5157
+
+GET {{secoundyear_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
