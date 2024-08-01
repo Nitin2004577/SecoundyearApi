@@ -22,4 +22,5 @@ namespace secoundyear.Properties.Models
         public string Description {get; set;} = string.Empty;
     }
 }
+
 // userName email password comform password

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace secoundyear.Properties.Models
 {
-    public class user
+    public class SingUp
     {
         [Key]
         public int id {get;set;}
@@ -17,9 +17,7 @@ namespace secoundyear.Properties.Models
 
         public string password {get; set;} = string.Empty;
 
-        public string comformPassword {get; set;} = string.Empty;
-
-        
+        public string comformPassword {get; set;} = string.Empty;       
 
 
     }

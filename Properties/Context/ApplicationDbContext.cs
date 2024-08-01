@@ -15,5 +15,9 @@ namespace secondyear.Properties.Context
         }
 
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<SingUp> SingUps { get; set; }
+
+        public DbSet<SingIn> singIn {get; set; }
+
     }
 }
