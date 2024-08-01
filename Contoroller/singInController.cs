@@ -21,7 +21,7 @@ namespace secoundyear.Contoroller
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_context.singIn.ToList());
+            return Ok(_context.singIns.ToList());
         }
 
 
@@ -30,9 +30,9 @@ namespace secoundyear.Contoroller
         public IActionResult Create(SingIn singIn)
         {
 
-            _context.singIn.Add(singIn);
+            _context.singIns.Add(singIn);
             _context.SaveChanges();
-            return Ok("Created Sucessfully");
+            return Ok(new { message = "Created Sucessfully", singIn });
         }
 
     }
