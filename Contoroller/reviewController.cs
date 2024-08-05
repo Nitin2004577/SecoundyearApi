@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using secondyear.Properties.Context;
 using secoundyear.Properties.Models;
+using usingLinq.Models;
 // using usingLinq.Context;
 // using usingLinq.Models;
 

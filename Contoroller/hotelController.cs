@@ -1,92 +1,122 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using secondyear.Properties.Context;
-using secoundyear.Migrations;
 using secoundyear.Properties.Models;
+using usingLinq.Dtos;
 
-namespace secoundyear.Contoroller
+namespace usingLinq.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class hotelController : ControllerBase
+    public class HotelController : ControllerBase  
     {
         private readonly ApplicationDbContext _context;
 
-        public hotelController(ApplicationDbContext context)
+        public HotelController(ApplicationDbContext context)
         {
             _context = context;
         }
+
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Hotel>>> Get()
         {
-            return Ok(_context.Hotels.ToList());
+            var hotel = await _context.Hotels.ToListAsync();
+            return Ok(hotel);
         }
-
-
+  
         [HttpPost]
 
-        public IActionResult Create(Hotel hotel)
+        public async Task<ActionResult<IEnumerable<Hotel>>> Create([FromBody] HotelDto hotelDto)
         {
+          try{
+            // Ensure IsDeleted is false
+            hotelDto.IsDeleted = false;
 
-            _context.Hotels.Add(hotel);
-            _context.SaveChanges();
-            return Ok("Created Sucessfully");
+            var hotel = new Hotel{
+                Name = hotelDto.Name,
+                Description = hotelDto.Description,
+                ImageUrl = hotelDto.ImageUrl,
+            };
+
+           await _context.Hotels.AddAsync(hotel);
+           await _context.SaveChangesAsync();
+               return CreatedAtAction(nameof(GetById), new { id = hotel.Id }, hotel);
+            // return Ok("Created Successfully");
+          }catch{
+            return BadRequest();
+          }
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult GetById(int Id)
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
         {
-            var hotels = _context.Hotels.Find(Id);
-            if (hotels == null)
+            var hotel = _context.Hotels.Find(id);
+
+            if(hotel == null){
+                return NotFound();
+            }
+
+            return Ok(hotel);
+        }
+
+        [HttpPut("{id}")]
+
+        public async Task<ActionResult<IEnumerable<Hotel>>> Update(int id , Hotel updateHotel)
+        {
+            try{
+                
+            var findHotel = await _context.Hotels.FindAsync(id);
+
+            if(findHotel == null)
             {
                 return NotFound();
             }
-            return Ok(hotels);
-        }
 
-        [HttpPut("{Id}")]
-        public IActionResult Put(int Id, Hotel requestHotel)
-        {
-            var hotel = _context.Hotels.Find(Id);
+            findHotel.Name = updateHotel.Name;
+            findHotel.Description = updateHotel.Description;
+            findHotel.ImageUrl = updateHotel.ImageUrl;
+           await _context.SaveChangesAsync();
 
-
-            hotel.Name = requestHotel.Name;
-
-            _context.SaveChanges();
             return Ok("Updated Sucessfully");
-
+            
+            }catch{
+                return BadRequest();
+            }
         }
 
-        [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id)
-        {
-            var hotel = _context.Hotels.Find(Id);
+        [HttpDelete("{id}")]
 
-            _context.Hotels.Remove(hotel);
+        public IActionResult Delete(int id)
+        {
+            var findHotel = _context.Hotels.Find(id);
+
+            if (findHotel == null) {
+                return NotFound();
+            }
+
+            // _context.Hotels.Remove(findHotel);
+            findHotel.IsDeleted = true;
             _context.SaveChanges();
-            return Ok("Deleted sucessfully");
+
+            return Ok("Deleted Sucessfully");
+
         }
 
         [HttpGet("search")]
         public IActionResult SearchByName([FromQuery] string name)
         {
-            var hotel = _context.Hotels
-            .Where(h => h.Name.Contains(name))
-            .ToList();
-            return Ok(hotel);
+            var hotels = _context.Hotels
+                .Where(h => h.Name.Contains(name))
+                .ToList();
 
+            if (!hotels.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(hotels);
         }
 
-
-
-
+        
     }
 }
-
-
-
-
-

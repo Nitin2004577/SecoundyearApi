@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using secoundyear.Properties.Models;
+using usingLinq.Models;
 
 
 namespace secondyear.Properties.Context
@@ -20,7 +21,13 @@ namespace secondyear.Properties.Context
         public DbSet<SingIn> singIns {get; set; } 
 
         public DbSet<Review> reviews {get; set; }
+        
 
+        public DbSet<TravelPackage> travelPackages { get; set; }
+        public DbSet<User>  users { get;  set; }
 
+        public DbSet<Booking> bookings {get; set;}
     }
+
+   
 }

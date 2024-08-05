@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using secoundyear.Properties.Models;
 
-namespace secoundyear.Properties.Models
+namespace usingLinq.Models
 {
     public class Review
     {
         [Key]
         public int Id { get; set; }
 
-        public string rating { get; set; } = string.Empty;
+        public int? Rating { get; set; }
 
-        public string Comment { get; set; } = string.Empty;      // id rating comment hotelId
+        public string? ReviewText { get; set; } = String.Empty;
 
-        public string hotelId { get; set; } = string.Empty;
+        public int? HotelId { get; set; }
+        public Hotel? Hotel { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
     }
 }
-
-// userName email password comform password
